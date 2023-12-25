@@ -2,5 +2,8 @@
 
 require_relative 'config/environment'
 
+Accuweather::API.compile!
+run Accuweather::API
+
 run Rails.application
 Rails.application.load_server
