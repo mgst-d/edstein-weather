@@ -32,6 +32,7 @@ gem 'redis', '>= 4.0.1'
 gem 'grape'
 gem 'grape-raketasks'
 gem 'httparty'
+gem 'vcr'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
