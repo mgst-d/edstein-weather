@@ -2,15 +2,15 @@ require 'rails_helper'
 
 RSpec.describe AccuweatherService, type: :service do
 
-  it "#current_data" do
+  it "#current_weather" do
     VCR.use_cassette("accuweather_service") do
-      expect(AccuweatherService.new.current_data).to be_ok
+      expect(AccuweatherService.new.current_weather).to be_ok
     end
   end
 
-  it "#historical_data" do
+  it "#historical_weather" do
     VCR.use_cassette("accuweather_service") do
-      expect(AccuweatherService.new.historical_data).to be_ok
+      expect(AccuweatherService.new.historical_weather).to be_ok
     end
   end
 
