@@ -8,35 +8,53 @@ module Accuweather
     resource :weather do
       desc 'Returns current weather'
       get :current do
-        'hi world'
+        Weather.last.as_json(:only => [:time, :temperature])
       end
 
       desc 'Returns historical weather'
       resource :historical do
+
+        desc 'Returns historical weather'
+        get :/ do
+          Weather.where(time: (Time.now - 1.day)..Time.now).as_json(:only => [:time, :temperature])
+        end
+
         desc 'Returns max weather'
         get :max do
-          'max'
+          JSON.generate(Weather.where(time: (Time.now - 1.day)..Time.now).maximum(:temperature))
         end
   
         desc 'Returns avg weather'
         get :avg do
-          'avg'
+          JSON.generate(Weather.where(time: (Time.now - 1.day)..Time.now).average(:temperature))
         end
 
         desc 'Returns min weather'
         get :min do
-          'min'
+          JSON.generate(Weather.where(time: (Time.now - 1.day)..Time.now).minimum(:temperature))
         end
+   
       end
+      resource :by_time do
+        params do
+          requires :time, type: Integer, desc: "Received time"
+        end
+        route_param :time do
+          get do
+            nearest_time = Weather.where("time < ? ", (params[:time]).to_datetime).order("time desc").limit(1)
 
-      
-      get :by_time do
-        'by_time'
+            if nearest_time.blank?
+              status 404
+            else
+              nearest_time.as_json(:only => [:time, :temperature])
+            end
+          end
+        end
       end
     end
 
     get :health do
-      status 200
+      status :ok
     end
 
   end
